@@ -1,0 +1,11 @@
+# Logs & Temporary files
+*.log
+*.tmp
+*.bak
+tmp_chrome/
+.DS_Store
+Thumbs.db
+
+# Test screenshots
+test_*.png
+verified_*.png

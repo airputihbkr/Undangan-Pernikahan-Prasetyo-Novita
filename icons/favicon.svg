@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7a1c32"/>
+      <stop offset="100%" stop-color="#460e1b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff2b2"/>
+      <stop offset="35%" stop-color="#dfb743"/>
+      <stop offset="70%" stop-color="#a87a10"/>
+      <stop offset="100%" stop-color="#fef3bf"/>
+    </linearGradient>
+    <linearGradient id="gold2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff8cd"/>
+      <stop offset="50%" stop-color="#dfb743"/>
+      <stop offset="100%" stop-color="#916700"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Circular Base -->
+  <circle cx="32" cy="32" r="30.5" fill="url(#bg)"/>
+  <circle cx="32" cy="32" r="28.5" fill="none" stroke="url(#gold)" stroke-width="1.2" opacity="0.85"/>
+
+  <!-- Left Ring -->
+  <circle cx="25.5" cy="34" r="11" fill="none" stroke="url(#gold)" stroke-width="3.6" filter="url(#shadow)"/>
+  
+  <!-- Right Ring -->
+  <circle cx="38.5" cy="34" r="11" fill="none" stroke="url(#gold2)" stroke-width="3.6" filter="url(#shadow)"/>
+  
+  <!-- Left Ring Intertwining Arch (Over) -->
+  <path d="M 28.5 23.5 A 11 11 0 0 1 36.5 34" fill="none" stroke="url(#gold)" stroke-width="3.6"/>
+
+  <!-- Diamond on Right Ring -->
+  <g transform="translate(38.5, 23)">
+    <!-- Gem Base -->
+    <polygon points="0,-6 4.5,-2 3,2.5 -3,2.5 -4.5,-2" fill="#ffffff" stroke="#90c0ea" stroke-width="0.6"/>
+    <line x1="0" y1="-6" x2="0" y2="2.5" stroke="#90c0ea" stroke-width="0.6"/>
+    <line x1="-4.5" y1="-2" x2="4.5" y2="-2" stroke="#90c0ea" stroke-width="0.6"/>
+    <!-- Sparkle Stars -->
+    <polygon points="0,-8 1.5,-4 5,-4 2.5,-1.5 3.5,2 0,0 -3.5,2 -2.5,-1.5 -5,-4 -1.5,-4" fill="#ffffff" opacity="0.95"/>
+    <circle cx="4" cy="-4" r="1" fill="#ffffff"/>
+  </g>
+</svg>
