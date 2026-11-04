@@ -469,6 +469,32 @@
     transform: translateX(-50%) translateY(0);
   }
 
+
+  /* === Smooth Scroll-Triggered Text Transitions (All Sections) === */
+  .wedding-text-anim {
+    opacity: 0 !important;
+    transform: translateY(22px) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+  }
+  
+  .wedding-text-anim.anim-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .wedding-title-anim {
+    opacity: 0 !important;
+    transform: translateY(24px) scale(0.97) !important;
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+  }
+  
+  .wedding-title-anim.anim-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+  }
+
 </style>
 
 
@@ -1301,6 +1327,11 @@
                       document.getElementById('1baf42ab-6d93-4d19-86e7-3111f9857f23');
     if (targetSec) {
       setTimeout(() => targetSec.scrollIntoView({ behavior: 'smooth' }), 300);
+      setTimeout(() => {
+        targetSec.querySelectorAll('.wedding-text-anim, .wedding-title-anim').forEach(function(el) {
+          el.classList.add('anim-revealed');
+        });
+      }, 400);
     }
   }
 
@@ -1566,6 +1597,137 @@
     }
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+    // 8. Text Animations across all visible sections (Scroll Reveal & Transition)
+    function initWeddingTransitions() {
+      // A. Cover Overlay Transition
+      var cover = document.getElementById('cover-overlay');
+      if (cover) {
+        var coverElements = [];
+        cover.querySelectorAll('h1, h2, h3, h4, p').forEach(function(el) {
+          if (!el.closest('button')) {
+            var t = (el.innerText || el.textContent || '').trim();
+            if (t.length > 0) coverElements.push(el);
+          }
+        });
+        var coverBtn = cover.querySelector('button');
+        if (coverBtn) coverElements.push(coverBtn);
+
+        coverElements.forEach(function(el, idx) {
+          el.classList.add('wedding-text-anim');
+          el.style.transitionDelay = (0.2 + (idx * 0.15)) + 's';
+          setTimeout(function() {
+            el.classList.add('anim-revealed');
+          }, 80);
+        });
+      }
+
+      // B. Visible Sections Scroll Transitions
+      var allSections = Array.from(document.querySelectorAll('section, #wedding-gift-section')).filter(function(s) {
+        if (s.id === 'cover-overlay') return false;
+        var style = window.getComputedStyle(s);
+        return style.display !== 'none' && style.visibility !== 'hidden' && s.offsetHeight > 0;
+      });
+
+      allSections.forEach(function(sec) {
+        var raw = [];
+
+        // Judul section (h1 - h6)
+        sec.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function(h) {
+          raw.push({ el: h, isTitle: true });
+        });
+
+        // Paragraf teks
+        sec.querySelectorAll('p').forEach(function(p) {
+          if (!p.closest('button') && !p.closest('.wedding-gift-card')) {
+            var txt = (p.innerText || p.textContent || '').trim();
+            if (txt.length > 0) {
+              raw.push({ el: p, isTitle: false });
+            }
+          }
+        });
+
+        // Countdown Section: Judul, 4 Box Countdown, Tombol Kalender
+        if (sec.id === 'f5d1c55b-09ff-4e29-977e-934cd8297c01') {
+          var cdTitle = sec.querySelector('span');
+          if (cdTitle) raw.push({ el: cdTitle, isTitle: true });
+          var cdBoxes = sec.querySelectorAll('.countdown-days, .countdown-hours, .countdown-minutes, .countdown-seconds');
+          cdBoxes.forEach(function(b) {
+            if (b.parentElement && !raw.some(function(r) { return r.el === b.parentElement; })) {
+              raw.push({ el: b.parentElement, isTitle: false });
+            }
+          });
+          var cdBtn = sec.querySelector('button');
+          if (cdBtn) raw.push({ el: cdBtn, isTitle: false });
+        }
+
+        // Wedding Gift Section: Kartu ATM BNI
+        if (sec.id === 'wedding-gift-section') {
+          var giftCards = sec.querySelectorAll('.wedding-gift-card');
+          giftCards.forEach(function(c) { raw.push({ el: c, isTitle: false }); });
+        }
+
+        // Section Lokasi / Resepsi: Tombol Lihat Lokasi Maps
+        if (sec.id === '051be468-dafa-4853-8d81-e8fbb0c15615') {
+          var mapsBtn = sec.querySelector('button');
+          if (mapsBtn) raw.push({ el: mapsBtn, isTitle: false });
+        }
+
+        // Filter descendants & duplicates
+        var finalTargets = [];
+        raw.forEach(function(item) {
+          var already = finalTargets.some(function(x) { return x.el === item.el || x.el.contains(item.el); });
+          if (!already) {
+            finalTargets.push(item);
+          }
+        });
+
+        // Pasang kelas transisi & delay bertingkat (staggered delay)
+        finalTargets.forEach(function(item, idx) {
+          if (item.isTitle) {
+            item.el.classList.add('wedding-title-anim');
+          } else {
+            item.el.classList.add('wedding-text-anim');
+          }
+          var delay = Math.min(idx * 0.12, 0.72);
+          item.el.style.transitionDelay = delay + 's';
+        });
+
+        function revealSection() {
+          finalTargets.forEach(function(item) {
+            item.el.classList.add('anim-revealed');
+          });
+        }
+
+        // IntersectionObserver untuk memicu transisi saat scroll masuk ke layar
+        if ('IntersectionObserver' in window) {
+          var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                revealSection();
+                observer.unobserve(entry.target);
+              }
+            });
+          }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -40px 0px'
+          });
+
+          observer.observe(sec);
+        } else {
+          revealSection();
+        }
+
+        // Fallback jika section sudah terlihat saat awal load
+        var rect = sec.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          revealSection();
+        }
+      });
+    }
+
+    initWeddingTransitions();
+
   }
 
   if (document.readyState === 'loading') {
