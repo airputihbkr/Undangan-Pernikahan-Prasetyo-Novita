@@ -342,48 +342,68 @@
     font-weight: 600 !important;
   }
 
-  /* === Section 2: Photo3.jpg & Non-Latin Font === */
+  /* === Section 2: Efek Desain Asli (Foto3 + Foreground Awan Bunga Lampu) === */
+  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] {
+    position: relative !important;
+    height: 826px !important;
+    overflow: hidden !important;
+    background-color: #f7f3ee !important;
+  }
+  /* Background gazebo bawaan viding */
+  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="5d2bd23d-431c-4b97-99ff-a60b17ec012e"] {
+    display: none !important;
+  }
+  /* Container Foto Pengantin Berdiri (foto3.jpg) */
   [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="5b5be054-34d0-444d-a1f6-968f7b6ca2bf"] {
     left: 50% !important;
-    top: 0 !important;
+    top: 0px !important;
     transform: translateX(-50%) !important;
-    width: 100% !important;
-    max-width: 484px !important;
-    height: 100% !important;
-    max-height: 826px !important;
+    width: 621px !important;
+    height: 932px !important;
     z-index: 2 !important;
   }
   [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="5b5be054-34d0-444d-a1f6-968f7b6ca2bf"] img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    object-position: center top !important;
+    object-position: center 12% !important;
+    opacity: 1 !important;
+    mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 84%) !important;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 84%) !important;
+  }
+  /* Foreground Bunga, Rumput & Lampu Jalan Vintage Melengkung Persis Referensi */
+  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="2302d213-2b7d-4737-9430-7bf953fbefd7"] {
+    left: 50% !important;
+    top: auto !important;
+    bottom: -40px !important;
+    transform: translateX(-50%) scale(1) !important;
+    z-index: 5 !important;
+    pointer-events: none !important;
+    display: block !important;
     opacity: 1 !important;
   }
-  /* Sembunyikan background default taman pink agar foto3 bersih */
-  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="5d2bd23d-431c-4b97-99ff-a60b17ec012e"] {
-    display: none !important;
-  }
-  /* Non-Latin Font di Section 2 - posisikan di puncak wayang di atas kepala */
+  /* Teks Nama Pengantin di Tengah Wayang Gunungan Sesuai Desain Referensi */
   [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="17b866cf-bf01-4b0e-b72c-13daf42ff4df"] {
     left: 50% !important;
-    top: 25px !important;
+    top: 150px !important;
     transform: translateX(-50%) !important;
     width: 100% !important;
-    max-width: 320px !important;
-    z-index: 10 !important;
+    max-width: 380px !important;
+    z-index: 6 !important;
+    pointer-events: auto !important;
   }
   [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="17b866cf-bf01-4b0e-b72c-13daf42ff4df"] p {
     margin: 0 !important;
-    line-height: 1.1 !important;
+    line-height: 1.0 !important;
+    text-align: center !important;
   }
   [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="17b866cf-bf01-4b0e-b72c-13daf42ff4df"] span {
     font-family: 'Cinzel', 'Zen Antique Soft', serif !important;
-    font-size: 20px !important;
-    line-height: 24px !important;
+    font-size: 32px !important;
+    line-height: 38px !important;
     letter-spacing: 2px !important;
     color: #ffffff !important;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 20px rgba(110,34,55,1), 0 0 8px rgba(0,0,0,0.95) !important;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.95), 0 0 25px rgba(0,0,0,0.9), 0 0 10px rgba(110,34,55,1) !important;
     font-weight: 700 !important;
   }
 
@@ -658,32 +678,8 @@
     left: 50% !important;
     transform: translate(-50%, -3.5px) !important;
   }
-  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="17b866cf-bf01-4b0e-b72c-13daf42ff4df"] {
-    left: 50% !important;
-    top: 25px !important;
-    transform: translateX(-50%) !important;
-    width: 100% !important;
-    max-width: 340px !important;
-    z-index: 10 !important;
-  }
-  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="17b866cf-bf01-4b0e-b72c-13daf42ff4df"] p {
-    margin: 0 !important;
-    line-height: 1.15 !important;
-  }
-  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="17b866cf-bf01-4b0e-b72c-13daf42ff4df"] span {
-    font-family: 'Cinzel', 'Zen Antique Soft', serif !important;
-    font-size: 22px !important;
-    line-height: 26px !important;
-    letter-spacing: 2.5px !important;
-    color: #ffffff !important;
-    text-transform: uppercase !important;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 20px rgba(110,34,55,1), 0 0 8px rgba(0,0,0,0.95) !important;
-    font-weight: 700 !important;
-  }
-  [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="2302d213-2b7d-4737-9430-7bf953fbefd7"] {
-    left: 50% !important;
-    transform: translate(-50%, 328px) !important;
-  }
+/* cleaned redundant sec2 text css */
+/* cleaned duplicate fg rule */
   [id="27c4222c-f643-457e-ba7b-0daee2565a2d"] [id="5d2bd23d-431c-4b97-99ff-a60b17ec012e"] {
     left: 50% !important;
     transform: translate(-50%, -3.5px) !important;
