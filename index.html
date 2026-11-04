@@ -470,29 +470,45 @@
   }
 
 
-  /* === Smooth Scroll-Triggered Text Transitions (All Sections) === */
-  .wedding-text-anim {
+    /* === Smooth Scroll-Triggered Text Transitions (Slide Right & Variations) === */
+  .wedding-text-anim,
+  .wedding-slide-right {
     opacity: 0 !important;
-    transform: translateY(22px) !important;
+    transform: translateX(-38px) !important;
     transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
     will-change: opacity, transform;
   }
   
-  .wedding-text-anim.anim-revealed {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
+  .wedding-slide-left {
+    opacity: 0 !important;
+    transform: translateX(38px) !important;
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
   }
 
-  .wedding-title-anim {
+  .wedding-title-anim,
+  .wedding-title-slide-right {
     opacity: 0 !important;
-    transform: translateY(24px) scale(0.97) !important;
+    transform: translateX(-42px) scale(0.96) !important;
     transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) !important;
     will-change: opacity, transform;
   }
+
+  .wedding-card-slide {
+    opacity: 0 !important;
+    transform: translateX(-35px) scale(0.95) !important;
+    transition: opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1), transform 0.88s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform;
+  }
   
-  .wedding-title-anim.anim-revealed {
+  .wedding-text-anim.anim-revealed,
+  .wedding-slide-right.anim-revealed,
+  .wedding-slide-left.anim-revealed,
+  .wedding-title-anim.anim-revealed,
+  .wedding-title-slide-right.anim-revealed,
+  .wedding-card-slide.anim-revealed {
     opacity: 1 !important;
-    transform: translateY(0) scale(1) !important;
+    transform: translateX(0) scale(1) !important;
   }
 
 </style>
@@ -1328,7 +1344,7 @@
     if (targetSec) {
       setTimeout(() => targetSec.scrollIntoView({ behavior: 'smooth' }), 300);
       setTimeout(() => {
-        targetSec.querySelectorAll('.wedding-text-anim, .wedding-title-anim').forEach(function(el) {
+        targetSec.querySelectorAll('.wedding-text-anim, .wedding-title-anim, .wedding-slide-right, .wedding-slide-left, .wedding-title-slide-right, .wedding-card-slide').forEach(function(el) {
           el.classList.add('anim-revealed');
         });
       }, 400);
@@ -1598,9 +1614,9 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // 8. Text Animations across all visible sections (Scroll Reveal & Transition)
+    // 8. Text Animations across all visible sections (Slide Right & Variations)
     function initWeddingTransitions() {
-      // A. Cover Overlay Transition
+      // A. Cover Overlay Transition (Slide Right)
       var cover = document.getElementById('cover-overlay');
       if (cover) {
         var coverElements = [];
@@ -1614,8 +1630,9 @@
         if (coverBtn) coverElements.push(coverBtn);
 
         coverElements.forEach(function(el, idx) {
-          el.classList.add('wedding-text-anim');
-          el.style.transitionDelay = (0.2 + (idx * 0.15)) + 's';
+          var isTitle = el.tagName.startsWith('H') || (el.innerText && el.innerText.includes('Prasetyo'));
+          el.classList.add(isTitle ? 'wedding-title-slide-right' : 'wedding-slide-right');
+          el.style.transitionDelay = (0.15 + (idx * 0.14)) + 's';
           setTimeout(function() {
             el.classList.add('anim-revealed');
           }, 80);
@@ -1632,9 +1649,9 @@
       allSections.forEach(function(sec) {
         var raw = [];
 
-        // Judul section (h1 - h6)
+        // Judul section (h1 - h6) -> slide-right
         sec.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function(h) {
-          raw.push({ el: h, isTitle: true });
+          raw.push({ el: h, type: 'title-right' });
         });
 
         // Paragraf teks
@@ -1642,35 +1659,63 @@
           if (!p.closest('button') && !p.closest('.wedding-gift-card')) {
             var txt = (p.innerText || p.textContent || '').trim();
             if (txt.length > 0) {
-              raw.push({ el: p, isTitle: false });
+              // Tentukan jenis transisi berdasarkan konteks section
+              var animType = 'slide-right';
+
+              // Section 2 (Intro): Prasetyo geser kanan, Novita geser kiri
+              if (sec.id === '27c4222c-f643-457e-ba7b-0daee2565a2d') {
+                if (txt.toLowerCase().includes('novita')) {
+                  animType = 'slide-left';
+                } else if (txt.toLowerCase().includes('prasetyo')) {
+                  animType = 'title-right';
+                }
+              }
+
+              // Section 3 (Mempelai): Mempelai wanita geser kiri, pria geser kanan
+              if (sec.id === '1baf42ab-6d93-4d19-86e7-3111f9857f23') {
+                if (txt.toLowerCase().includes('novita') || txt.toLowerCase().includes('parwito') || txt.toLowerCase().includes('rumiyati') || txt.toLowerCase().includes('putri')) {
+                  animType = 'slide-left';
+                } else if (txt.toLowerCase().includes('prasetyo') || txt.toLowerCase().includes('suwarno') || txt.toLowerCase().includes('martini') || txt.toLowerCase().includes('putra')) {
+                  animType = 'slide-right';
+                }
+              }
+
+              // Section Acara & Lokasi: info jam / tanggal bergantian geser kiri
+              if (sec.id === '051be468-dafa-4853-8d81-e8fbb0c15615') {
+                if (txt.includes('WIB') || txt.includes('2026')) {
+                  animType = 'slide-left';
+                }
+              }
+
+              raw.push({ el: p, type: animType });
             }
           }
         });
 
-        // Countdown Section: Judul, 4 Box Countdown, Tombol Kalender
+        // Countdown Section: Judul, 4 Box Countdown bergantian dari kiri ke kanan, Tombol Kalender
         if (sec.id === 'f5d1c55b-09ff-4e29-977e-934cd8297c01') {
           var cdTitle = sec.querySelector('span');
-          if (cdTitle) raw.push({ el: cdTitle, isTitle: true });
+          if (cdTitle) raw.push({ el: cdTitle, type: 'title-right' });
           var cdBoxes = sec.querySelectorAll('.countdown-days, .countdown-hours, .countdown-minutes, .countdown-seconds');
           cdBoxes.forEach(function(b) {
             if (b.parentElement && !raw.some(function(r) { return r.el === b.parentElement; })) {
-              raw.push({ el: b.parentElement, isTitle: false });
+              raw.push({ el: b.parentElement, type: 'slide-right' });
             }
           });
           var cdBtn = sec.querySelector('button');
-          if (cdBtn) raw.push({ el: cdBtn, isTitle: false });
+          if (cdBtn) raw.push({ el: cdBtn, type: 'slide-right' });
         }
 
-        // Wedding Gift Section: Kartu ATM BNI
+        // Wedding Gift Section: Kartu ATM BNI (card-slide dengan scale)
         if (sec.id === 'wedding-gift-section') {
           var giftCards = sec.querySelectorAll('.wedding-gift-card');
-          giftCards.forEach(function(c) { raw.push({ el: c, isTitle: false }); });
+          giftCards.forEach(function(c) { raw.push({ el: c, type: 'card-slide' }); });
         }
 
         // Section Lokasi / Resepsi: Tombol Lihat Lokasi Maps
         if (sec.id === '051be468-dafa-4853-8d81-e8fbb0c15615') {
           var mapsBtn = sec.querySelector('button');
-          if (mapsBtn) raw.push({ el: mapsBtn, isTitle: false });
+          if (mapsBtn) raw.push({ el: mapsBtn, type: 'slide-right' });
         }
 
         // Filter descendants & duplicates
@@ -1684,10 +1729,14 @@
 
         // Pasang kelas transisi & delay bertingkat (staggered delay)
         finalTargets.forEach(function(item, idx) {
-          if (item.isTitle) {
-            item.el.classList.add('wedding-title-anim');
+          if (item.type === 'title-right') {
+            item.el.classList.add('wedding-title-slide-right');
+          } else if (item.type === 'slide-left') {
+            item.el.classList.add('wedding-slide-left');
+          } else if (item.type === 'card-slide') {
+            item.el.classList.add('wedding-card-slide');
           } else {
-            item.el.classList.add('wedding-text-anim');
+            item.el.classList.add('wedding-slide-right');
           }
           var delay = Math.min(idx * 0.12, 0.72);
           item.el.style.transitionDelay = delay + 's';
